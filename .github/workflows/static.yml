@@ -29,15 +29,19 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Push to prod repo
         uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          repository: aarons-hub/prod
+          token: ${{ secrets.PROD_REPO_TOKEN }}
+          path: prod-repo
+
+      - name: Copy artifacts to prod repo
+        run: |
+          rsync -av --delete ./ ./prod-repo/
+          cd prod-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Deploy from ${{ github.repository }}@${{ github.sha }}" || echo "No changes to commit"
+          git push
