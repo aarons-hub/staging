@@ -1,4 +1,4 @@
-# deploying static content to GitHub Pages
+# Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
 on:
@@ -25,8 +25,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source repo (no token needed if same repo)
+      - name: Checkout source repo
         uses: actions/checkout@v4
+        with:
+          repository: aarons-hub/staging
+          token: ${{ secrets.STAGING_TOKEN }}
 
       - name: Checkout prod repo
         uses: actions/checkout@v4
