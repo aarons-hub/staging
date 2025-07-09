@@ -25,11 +25,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source repo
+      - name: Checkout source repo (no token needed if same repo)
         uses: actions/checkout@v4
-        with:
-          repository: aarons-hub/staging
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout prod repo
         uses: actions/checkout@v4
