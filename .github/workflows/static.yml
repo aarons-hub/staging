@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: aarons-hub/staging
-          token: ${{ secrets.STAGING_TOKEN }}
+          token: ${{ secrets.STAGING_TOKEN2 }}
 
       - name: Checkout prod repo
         uses: actions/checkout@v4
