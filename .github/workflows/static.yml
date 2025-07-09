@@ -22,28 +22,22 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Single deploy job since we're just deploying
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source repo
+      - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          repository: aarons-hub/staging
-          token: ${{ secrets.STAGING_TOKEN2 }}
-
-      - name: Checkout prod repo
-        uses: actions/checkout@v4
-        with:
-          repository: aarons-hub/prod
-          token: ${{ secrets.PROD_TOKEN }}
-          path: prod
-
-      - name: Copy artifacts to prod repo
-        run: |
-          rsync -av --delete --exclude='.git' ./ ./prod/
-          cd prod
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Deploy from ${{ github.repository }}@${{ github.sha }}" || echo "No changes to commit"
-          git push
+          # Upload entire repository
+          path: "."
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
