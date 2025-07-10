@@ -20,5 +20,5 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.STAGING_TOKEN }}
         run: |
-          git remote add prod https://x-access-token:${STAGING_TOKEN}@github.com/aaronGitHubDev/prod.git
+          git remote add prod https://x-access-token:${STAGING_TOKEN}@github.com/aarons-hub/prod.git
           git push prod HEAD:main --force
