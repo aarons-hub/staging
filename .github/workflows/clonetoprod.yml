@@ -1,24 +1,22 @@
 name: Promote to Production
 
 on:
-  workflow_dispatch: # allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   promote:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout staging code
+      - name: Checkout staging branch
         uses: actions/checkout@v4
 
       - name: Configure Git
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
 
       - name: Push to prod repo
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git remote add prod https://x-access-token:${PAT_TOKEN}@github.com/aarons-hub/prod.git
+          git remote add prod "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/aarons-hub/prod.git"
           git push prod HEAD:main --force
